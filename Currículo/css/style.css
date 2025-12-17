@@ -1,0 +1,67 @@
+@font-face {
+    font-family: renata;
+    src: url('/fonte/renatha_signature/RenathaSignature.otf');
+}
+
+body{
+    width: 100%;
+    color: #069;
+    text-align: center;
+    min-height: 100vh;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signature{
+    border-radius: 50%;
+    height: 300px;
+    border: solid 5px #069;
+}
+
+h1{
+    font-family: renata;
+    font-size: 100px;
+    margin: 0;
+    font-weight: 200;
+}
+
+.container{
+    width: 50%;
+    padding: 15px;
+    box-shadow: 0 0 5px rgb(24, 24, 24);
+    margin: auto;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background-color: #069;
+    border-radius: 6px;
+}
+
+.hr_dados1{
+    background: #069;
+    height: 10px;
+    border: none;
+    outline: none;
+}
+
+h2{
+  display: inline;
+  padding: 0 0.3em;
+}
+
+.logos img{
+    height: 40px;
+    transition: .5s;
+    margin: 5px;
+}
+
+.logos img:hover{
+  scale: 170%;
+}
+
+.logos{
+    margin: 10px auto;
+}
