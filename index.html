@@ -7,10 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Mini Valley</h1>
-    <p>W, A, S, D para andar | Clique nos lotes para: Arar -> Plantar -> Regar</p>
+    <div id="hud">
+        <div class="hud-item">💰 Ouro: $<span id="display-money">0</span></div>
+        <div class="hud-item">🍅 Tomates: <span id="display-inventory">0</span></div>
+    </div>
+
+    <p>W, A, S, D: Andar | Clique na terra: Plantar | Clique na Caixa: Vender</p>
 
     <div id="game-container">
+        <div id="sell-box">
+            <span>VENDER</span>
+        </div>
+
         <div id="farm-grid"></div>
         
         <div id="player"></div>

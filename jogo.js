@@ -1,18 +1,24 @@
-// Configurações e Elementos
-        const gameContainer = document.getElementById('game-container');
+// Elementos do HTML
         const player = document.getElementById('player');
         const farmGrid = document.getElementById('farm-grid');
+        const sellBox = document.getElementById('sell-box');
+        
+        // Elementos da UI (Textos)
+        const displayMoney = document.getElementById('display-money');
+        const displayInventory = document.getElementById('display-inventory');
 
-        // Posição Inicial do Jogador
+        // Lógica de Economia e Inventário
+        let money = 0;
+        let inventory = 0;
+        const tomatoPrice = 15; // Cada tomate vale 15 moedas de ouro
+
+        // Movimentação
         let playerX = 280;
         let playerY = 280;
         const playerSpeed = 15;
-
-        // Limites do mapa
         const maxCoord = 555;
         const minCoord = 5;
 
-        // Movimentação do Jogador (WASD)
         window.addEventListener('keydown', (e) => {
             const key = e.key.toLowerCase();
             if (key === 'w' && playerY > minCoord) playerY -= playerSpeed;
@@ -20,17 +26,14 @@
             if (key === 'a' && playerX > minCoord) playerX -= playerSpeed;
             if (key === 'd' && playerX < maxCoord) playerX += playerSpeed;
 
-            // Atualiza posição visual
             player.style.top = playerY + 'px';
             player.style.left = playerX + 'px';
         });
 
-        // Criar o Grid de Plantação (5x5)
+        // Criar o Grid
         for (let i = 0; i < 25; i++) {
             const plot = document.createElement('div');
             plot.classList.add('plot');
-            
-            // Estado do lote: 'grama', 'arada', 'plantada', 'regada', 'pronto'
             plot.dataset.state = 'grama'; 
 
             plot.addEventListener('click', () => {
@@ -40,43 +43,57 @@
             farmGrid.appendChild(plot);
         }
 
-        // Lógica de Fazenda (Estados do clique)
+        // Sistema de Plantação e Colheita
         function interagirComLote(plot) {
             let estado = plot.dataset.state;
 
             if (estado === 'grama') {
-                // 1. Ara a terra
                 plot.classList.add('arada');
                 plot.dataset.state = 'arada';
             } 
             else if (estado === 'arada') {
-                // 2. Planta a semente
                 plot.dataset.state = 'plantada';
-                plot.innerHTML = '🌱'; // Broto
+                plot.innerHTML = '🌱';
             } 
             else if (estado === 'plantada') {
-                // 3. Rega a planta
                 plot.classList.add('regada');
                 plot.dataset.state = 'regada';
 
-                // Inicia o tempo de crescimento (5 segundos)
                 setTimeout(() => {
-                    progredirCrescimento(plot);
+                    if (plot.dataset.state === 'regada') {
+                        plot.innerHTML = '🍅';
+                        plot.dataset.state = 'pronto';
+                    }
                 }, 5000);
             }
             else if (estado === 'pronto') {
-                // 4. Colhe a planta amadurecida
+                // Ao colher, agora vai para o INVENTÁRIO
                 plot.innerHTML = '';
                 plot.classList.remove('arada', 'regada');
                 plot.dataset.state = 'grama';
-                alert('🍅 Você colheu um tomate fresco!');
+                
+                inventory++; // Adiciona 1 tomate
+                atualizarHUD();
             }
         }
 
-        // Transição de crescimento pós-rega
-        function progredirCrescimento(plot) {
-            if (plot.dataset.state === 'regada') {
-                plot.innerHTML = '🍅'; // Virou um tomate pronto!
-                plot.dataset.state = 'pronto';
+        // Sistema de Vendas
+        sellBox.addEventListener('click', () => {
+            if (inventory > 0) {
+                const totalGanho = inventory * tomatoPrice;
+                money += totalGanho; // Adiciona o dinheiro
+                inventory = 0;       // Esvazia os tomates do bolso
+                
+                atualizarHUD();
+                
+                // Pequeno feedback visual na caixa
+                sellBox.style.backgroundColor = '#2ecc71';
+                setTimeout(() => sellBox.style.backgroundColor = '#8e44ad', 200);
             }
+        });
+
+        // Função para atualizar os textos na tela
+        function atualizarHUD() {
+            displayInventory.innerText = inventory;
+            displayMoney.innerText = money;
         }
